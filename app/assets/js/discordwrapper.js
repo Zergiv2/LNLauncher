@@ -8,7 +8,7 @@ const { Client } = require('discord-rpc-patch')
 let client
 let activity
 
-exports.initRPC = function(genSettings, servSettings, initialDetails = 'Waiting for Client..'){
+exports.initRPC = function(genSettings, servSettings, initialDetails = 'Esperando al Client..'){
     client = new Client({ transport: 'ipc' })
 
     activity = {
@@ -26,7 +26,7 @@ exports.initRPC = function(genSettings, servSettings, initialDetails = 'Waiting 
         logger.info('Discord RPC Connected')
         client.setActivity(activity)
     })
-    
+
     client.login({clientId: genSettings.clientId}).catch(error => {
         if(error.message.includes('ENOENT')) {
             logger.info('Unable to initialize Discord Rich Presence, no client detected.')

@@ -273,12 +273,8 @@ body, button {
 */
 
 #welcomeImageSeal {
-    border-radius: 50%;
-    border: 2px solid #cad7e1;
-    background: rgba(1, 2, 1, 0.5);
     height: 125px;
     width: 125px;
-    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0);
     margin-bottom: 5%;
     margin-top: 10%;
 }
@@ -486,12 +482,8 @@ body, button {
 
 /* Logo on login form. */
 #loginImageSeal {
-    border-radius: 50%;
-    border: 2px solid #cad7e1;
-    background: rgba(1, 2, 1, 0.5);
     height: 125px;
     width: 125px;
-    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0);
     margin-bottom: 20px;
 }
 
@@ -542,15 +534,15 @@ body, button {
     10%, 90% {
         transform: translate3d(-1px, 0, 0);
     }
-    
+
     20%, 80% {
         transform: translate3d(2px, 0, 0);
     }
-  
+
     30%, 50%, 70% {
         transform: translate3d(-4px, 0, 0);
     }
-  
+
     40%, 60% {
         transform: translate3d(4px, 0, 0);
     }
@@ -1705,9 +1697,21 @@ input:checked + .toggleSwitchSlider:before {
 
 /* Mod elements sub-containers. */
 #settingsReqModsContainer,
-#settingsOptModsContainer,
-#settingsDropinModsContainer {
+#settingsOptModsContainer {
     padding-bottom: 25px;
+}
+
+#settingsDropinModsContainer {
+    display: none;
+}
+
+div#settingsOptModsContainer {
+    padding-bottom: 0px;
+}
+
+div#settingsDropinModsContent {
+    visibility: hidden;
+    padding-bottom: 10px;
 }
 
 /* Main content containers for mod elements. */
@@ -1820,6 +1824,15 @@ input:checked + .toggleSwitchSlider:before {
     background: rgba(54, 54, 54, 0.25);
     text-shadow: 0px 0px 20px white;
 }
+
+#settingsDropinFileSystemButton:disabled,
+#settingsDropinFileSystemButton[disabled]{
+    background: rgba(0, 0, 0, 0.86);
+    text-shadow: 0px 0px 20px #363636;
+    color: rgba(201, 201, 201, 0.25);
+    cursor: not-allowed;
+}
+
 /* Refresh instructions on the file system button. */
 #settingsDropinRefreshNote {
     font-size: 10px;
@@ -2855,20 +2868,17 @@ input:checked + .toggleSwitchSlider:before {
 
 /* Logo image. */
 #image_seal {
-    height: 70px;
+    height: 90px;
     width: auto;
     position: relative;
-    border: 2px solid white;
     box-sizing: border-box;
-    border-radius: 50%;
 }
 
 /* Logo container styles. */
 #image_seal_container {
     position: relative;
-    height: 70px;
-    width: 70px;
-    border-radius: 50%;
+    height: 90px;
+    width: 90px;
     margin-top: 50px;
 }
 
@@ -3099,6 +3109,9 @@ input:checked + .toggleSwitchSlider:before {
 .mediaButton:hover #settingsSVG,
 .mediaButton:focus #settingsSVG,
 .mediaButton:active #settingsSVG {
+    animation-name: loader-spin;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
     height: 23px;
 }
 
@@ -3106,7 +3119,7 @@ input:checked + .toggleSwitchSlider:before {
 #settingsTooltip {
     visibility: hidden;
     opacity: 0;
-    width: 75px;
+    width: 86px;
     height: 20px;
     background-color: rgba(0, 0, 0, 0.75);
     text-align: center;
@@ -3136,13 +3149,22 @@ input:checked + .toggleSwitchSlider:before {
     transition-delay:0s;
 }
 
-/* Twitter icon colors. */
-#twitterSVG:hover,
-#twitterURL:focus #twitterSVG {
-    fill: #1da1f2;
+/* Link icon colors. */
+#linkSVG:hover,
+#linkURL:focus #linkSVG {
+    fill: #48cae4;
 }
-#twitterSVG:active {
-    fill: #1b8dd4;
+#linkSVG:active {
+    fill: #48cae4;
+}
+
+/* Kick icon colors. */
+#kickURL:hover,
+#kickURL:focus #kickURL {
+    fill: #53fc19;
+}
+#kickURL:active {
+    fill: #53fc19;
 }
 
 /* Instagram icon colors. */
@@ -3167,10 +3189,10 @@ input:checked + .toggleSwitchSlider:before {
 /* Discord icon colors. */
 #discordSVG:hover,
 #discordURL:focus #discordSVG {
-    fill: #7288d9;
+    fill: #5662f6;
 }
 #discordSVG:active {
-    fill: #657ac4;
+    fill: #5662f6;
 }
 
 /*******************************************************************************
@@ -3193,7 +3215,7 @@ input:checked + .toggleSwitchSlider:before {
     width: 2px;
     background: rgba(107, 105, 105, 0.7);
     margin-left: 20px;
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
 /* * *
@@ -3328,6 +3350,8 @@ input:checked + .toggleSwitchSlider:before {
     border: none;
     cursor: pointer;
     outline: none;
+    /** Hidden for now */
+    visibility: hidden;
 }
 #newsButton:hover #newsButtonText,
 #newsButton:focus #newsButtonText {
@@ -3426,7 +3450,7 @@ input:checked + .toggleSwitchSlider:before {
     top: 25px;
     display: none;
 }
- 
+
 /* Left side of launch details container, displays percentage and a divider. */
 #launch_details_left {
     display: flex;
@@ -3457,8 +3481,9 @@ input:checked + .toggleSwitchSlider:before {
     outline: none;
     cursor: pointer;
     line-height: 24px;
-    padding: 0px;
+    padding-right: 20px;
     transition: 0.25s ease;
+    font-size: 12px;
 }
 #server_selection_button:hover,
 #server_selection_button:focus {
@@ -3747,7 +3772,6 @@ input:checked + .toggleSwitchSlider:before {
 /* Server listing image. */
 .serverListingImg {
     margin: 0px 10px 0px 5px;
-    border: 1px solid #fff;
     height: 50px;
     width: 50px;
 }
@@ -3816,7 +3840,7 @@ input:checked + .toggleSwitchSlider:before {
 .serverListingStarTooltip {
     visibility: hidden;
     opacity: 0;
-    width: 65px;
+    width: 90px;
     background-color: rgba(0, 0, 0, 0.40);
     text-align: center;
     border-radius: 4px;
@@ -3938,31 +3962,21 @@ input:checked + .toggleSwitchSlider:before {
     justify-content: center;
 }
 
-/* Stationary image for the spinner. */
-#loadCenterImage {
-    position: absolute;
-    width: 277px;
-    height: auto;
-}
-
-/* Rotating image for the spinner. */
+/* Scaling image for the spinner. */
 #loadSpinnerImage {
     width: 280px;
     height: auto;
     z-index: 400;
 }
 
-/* Rotating animation for the spinner. */
-@keyframes rotating {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Scaling animation for the spinner. */
+@keyframes scaling {
+    0%  {transform: scale(1.0);}
+    50% {transform: scale(1.22);}
+    100% {transform: scale(1.0);}
 }
 
-/* Class which is applied when the spinner image is spinning. */
-.rotating {
-    animation: rotating 10s linear infinite;
+/* Class which is applied when the spinner image is scaling. */
+.scaling {
+    animation: scaling 2s ease-in-out infinite;
 }

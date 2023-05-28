@@ -43,7 +43,7 @@ bindSettingsSelect()
 
 function bindFileSelectors(){
     for(let ele of document.getElementsByClassName('settingsFileSelButton')){
-        
+
         ele.onclick = async e => {
             const isJavaExecSel = ele.id === 'settingsJavaExecSel'
             const directoryDialog = ele.hasAttribute('dialogDirectory') && ele.getAttribute('dialogDirectory') == 'true'
@@ -237,7 +237,7 @@ let selectedSettingsTab = 'settingsTabAccount'
 /**
  * Modify the settings container UI when the scroll threshold reaches
  * a certain poin.
- * 
+ *
  * @param {UIEvent} e The scroll event.
  */
 function settingsTabScrollListener(e){
@@ -264,7 +264,7 @@ function setupSettingsTabs(){
 /**
  * Settings nav item onclick lisener. Function is exposed so that
  * other UI elements can quickly toggle to a certain tab from other views.
- * 
+ *
  * @param {Element} ele The nav item which has been clicked.
  * @param {boolean} fade Optional. True to fade transition.
  */
@@ -314,7 +314,7 @@ const settingsNavDone = document.getElementById('settingsNavDone')
 
 /**
  * Set if the settings save (done) button is disabled.
- * 
+ *
  * @param {boolean} v True to disable, false to enable.
  */
 function settingsSaveDisabled(v){
@@ -374,8 +374,8 @@ ipcRenderer.on(MSFT_OPCODE.REPLY_LOGIN, (_, ...arguments_) => {
 
             // Unexpected error.
             setOverlayContent(
-                'Something Went Wrong',
-                'Microsoft authentication failed. Please try again.',
+                'Error Inesperado',
+                'La autentificación de Microsoft ha fallado. Por favor inténtalo de nuevo.',
                 'OK'
             )
             setOverlayHandler(() => {
@@ -391,7 +391,7 @@ ipcRenderer.on(MSFT_OPCODE.REPLY_LOGIN, (_, ...arguments_) => {
         if (Object.prototype.hasOwnProperty.call(queryMap, 'error')) {
             switchView(getCurrentView(), viewOnClose, 500, 500, () => {
                 // TODO Dont know what these errors are. Just show them I guess.
-                // This is probably if you messed up the app registration with Azure.      
+                // This is probably if you messed up the app registration with Azure.
                 let error = queryMap.error // Error might be 'access_denied' ?
                 let errorDesc = queryMap.error_description
                 console.log('Error getting authCode, is Azure application registered correctly?')
@@ -430,8 +430,8 @@ ipcRenderer.on(MSFT_OPCODE.REPLY_LOGIN, (_, ...arguments_) => {
                         // Uh oh.
                         msftLoginLogger.error('Unhandled error during login.', displayableError)
                         actualDisplayableError = {
-                            title: 'Unknown Error During Login',
-                            desc: 'An unknown error has occurred. Please see the console for details.'
+                            title: 'Error desconocido',
+                            desc: 'Un error desconocido ha ocurrido. Por favor contáctate con Damots o Amgelo en Discord.'
                         }
                     }
 
@@ -461,11 +461,11 @@ function bindAuthAccountSelect(){
             for(let i=0; i<selectBtns.length; i++){
                 if(selectBtns[i].hasAttribute('selected')){
                     selectBtns[i].removeAttribute('selected')
-                    selectBtns[i].innerHTML = 'Select Account'
+                    selectBtns[i].innerHTML = 'Seleccionar Cuenta'
                 }
             }
             val.setAttribute('selected', '')
-            val.innerHTML = 'Selected Account &#10004;'
+            val.innerHTML = 'Cuenta Seleccionada &#10004;'
             setSelectedAccount(val.closest('.settingsAuthAccount').getAttribute('uuid'))
         }
     })
@@ -483,10 +483,10 @@ function bindAuthAccountLogOut(){
             if(Object.keys(ConfigManager.getAuthAccounts()).length === 1){
                 isLastAccount = true
                 setOverlayContent(
-                    'Warning<br>This is Your Last Account',
-                    'In order to use the launcher you must be logged into at least one account. You will need to login again after.<br><br>Are you sure you want to log out?',
-                    'I\'m Sure',
-                    'Cancel'
+                    'Precaución<br>Esta es tu última cuenta',
+                    'Para poder usar el launcher debes estar logueado en al menos una cuenta. Vas a tener que volver a iniciar sesión después de desloguearte.<br><br>Seguro que quieres hacerlo?',
+                    'Estoy Seguro',
+                    'Cancelar'
                 )
                 setOverlayHandler(() => {
                     processLogOut(val, isLastAccount)
@@ -499,7 +499,7 @@ function bindAuthAccountLogOut(){
             } else {
                 processLogOut(val, isLastAccount)
             }
-            
+
         }
     })
 }
@@ -507,7 +507,7 @@ function bindAuthAccountLogOut(){
 let msAccDomElementCache
 /**
  * Process a log out.
- * 
+ *
  * @param {Element} val The log out button element.
  * @param {boolean} isLastAccount If this logout is on the last added account.
  */
@@ -555,8 +555,8 @@ ipcRenderer.on(MSFT_OPCODE.REPLY_LOGOUT, (_, ...arguments_) => {
 
             // Unexpected error.
             setOverlayContent(
-                'Something Went Wrong',
-                'Microsoft logout failed. Please try again.',
+                'Algo ha fallado',
+                'El cierre de sesión de Microsoft falló. Por favor inténtalo de nuevo.',
                 'OK'
             )
             setOverlayHandler(() => {
@@ -565,13 +565,13 @@ ipcRenderer.on(MSFT_OPCODE.REPLY_LOGOUT, (_, ...arguments_) => {
             toggleOverlay(true)
         })
     } else if(arguments_[0] === MSFT_REPLY_TYPE.SUCCESS) {
-        
+
         const uuid = arguments_[1]
         const isLastAccount = arguments_[2]
         const prevSelAcc = ConfigManager.getSelectedAccount()
 
         msftLogoutLogger.info('Logout Successful. uuid:', uuid)
-        
+
         AuthManager.removeMicrosoftAccount(uuid)
             .then(() => {
                 if(!isLastAccount && uuid === prevSelAcc.uuid){
@@ -603,7 +603,7 @@ ipcRenderer.on(MSFT_OPCODE.REPLY_LOGOUT, (_, ...arguments_) => {
 /**
  * Refreshes the status of the selected account on the auth account
  * elements.
- * 
+ *
  * @param {string} uuid The UUID of the new selected account.
  */
 function refreshAuthAccountSelected(uuid){
@@ -611,12 +611,12 @@ function refreshAuthAccountSelected(uuid){
         const selBtn = val.getElementsByClassName('settingsAuthAccountSelect')[0]
         if(uuid === val.getAttribute('uuid')){
             selBtn.setAttribute('selected', '')
-            selBtn.innerHTML = 'Selected Account &#10004;'
+            selBtn.innerHTML = 'Cuenta Seleccionada &#10004;'
         } else {
             if(selBtn.hasAttribute('selected')){
                 selBtn.removeAttribute('selected')
             }
-            selBtn.innerHTML = 'Select Account'
+            selBtn.innerHTML = 'Seleccionar Cuenta'
         }
     })
 }
@@ -648,7 +648,7 @@ function populateAuthAccounts(){
             <div class="settingsAuthAccountRight">
                 <div class="settingsAuthAccountDetails">
                     <div class="settingsAuthAccountDetailPane">
-                        <div class="settingsAuthAccountDetailTitle">Username</div>
+                        <div class="settingsAuthAccountDetailTitle">Usuario</div>
                         <div class="settingsAuthAccountDetailValue">${acc.displayName}</div>
                     </div>
                     <div class="settingsAuthAccountDetailPane">
@@ -657,9 +657,9 @@ function populateAuthAccounts(){
                     </div>
                 </div>
                 <div class="settingsAuthAccountActions">
-                    <button class="settingsAuthAccountSelect" ${selectedUUID === acc.uuid ? 'selected>Selected Account &#10004;' : '>Select Account'}</button>
+                    <button class="settingsAuthAccountSelect" ${selectedUUID === acc.uuid ? 'selected>Seleccionado &#10004;' : '>Seleccionar'}</button>
                     <div class="settingsAuthAccountWrapper">
-                        <button class="settingsAuthAccountLogOut">Log Out</button>
+                        <button class="settingsAuthAccountLogOut">Cerrar Sesión</button>
                     </div>
                 </div>
             </div>
@@ -727,7 +727,7 @@ async function resolveModsForUI(){
 
 /**
  * Recursively build the mod UI elements.
- * 
+ *
  * @param {Object[]} mdls An array of modules to parse.
  * @param {boolean} submodules Whether or not we are parsing submodules.
  * @param {Object} servConf The server configuration object for this module level.
@@ -827,7 +827,7 @@ function saveModConfiguration(){
 
 /**
  * Recursively save mod config with submods.
- * 
+ *
  * @param {Object} modConf Mod config object to save.
  */
 function _saveModConfiguration(modConf){
@@ -901,9 +901,9 @@ function bindDropinModsRemoveButton(){
                 document.getElementById(fullName).remove()
             } else {
                 setOverlayContent(
-                    `Failed to Delete<br>Drop-in Mod ${fullName}`,
-                    'Make sure the file is not in use and try again.',
-                    'Okay'
+                    `Error al borrar<br>Mod Añadido${fullName}`,
+                    'Asegúrate que el archivo no está en uso y vuelve a intentarlo.',
+                    'OK'
                 )
                 setOverlayHandler(null)
                 toggleOverlay(true)
@@ -956,7 +956,7 @@ function saveDropinModConfiguration(){
                 DropinModUtil.toggleDropinMod(CACHE_SETTINGS_MODS_DIR, dropin.fullName, dropinUIEnabled).catch(err => {
                     if(!isOverlayVisible()){
                         setOverlayContent(
-                            'Failed to Toggle<br>One or More Drop-in Mods',
+                            'Error al alternar<br>Uno o más mods añadidos',
                             err.message,
                             'Okay'
                         )
@@ -1093,7 +1093,7 @@ async function loadSelectedServerOnModsTab(){
                             <path class="cls-1" d="M100.93,65.54C89,62,68.18,55.65,63.54,52.13c2.7-5.23,18.8-19.2,28-27.55C81.36,31.74,63.74,43.87,58.09,45.3c-2.41-5.37-3.61-26.52-4.37-39-.77,12.46-2,33.64-4.36,39-5.7-1.46-23.3-13.57-33.49-20.72,9.26,8.37,25.39,22.36,28,27.55C39.21,55.68,18.47,62,6.52,65.55c12.32-2,33.63-6.06,39.34-4.9-.16,5.87-8.41,26.16-13.11,37.69,6.1-10.89,16.52-30.16,21-33.9,4.5,3.79,14.93,23.09,21,34C70,86.84,61.73,66.48,61.59,60.65,67.36,59.49,88.64,63.52,100.93,65.54Z"/>
                             <circle class="cls-2" cx="53.73" cy="53.9" r="38"/>
                         </svg>
-                        <span class="serverListingStarTooltip">Main Server</span>
+                        <span class="serverListingStarTooltip">Servidor Principal</span>
                     </div>` : ''}
                 </div>
             </div>
@@ -1223,8 +1223,8 @@ settingsMaxRAMRange.onchange = (e) => {
 
 /**
  * Calculate common values for a ranged slider.
- * 
- * @param {Element} v The range slider to calculate against. 
+ *
+ * @param {Element} v The range slider to calculate against.
  * @returns {Object} An object with meta values for the provided ranged slider.
  */
 function calculateRangeSliderMeta(v){
@@ -1268,7 +1268,7 @@ function bindRangeSlider(){
 
                 // Distance from the beginning of the bar in pixels.
                 const diff = e.pageX - v.offsetLeft - track.offsetWidth/2
-                
+
                 // Don't move the track off the bar.
                 if(diff >= 0 && diff <= v.offsetWidth-track.offsetWidth/2){
 
@@ -1284,12 +1284,12 @@ function bindRangeSlider(){
                 }
             }
         }
-    }) 
+    })
 }
 
 /**
  * Update a ranged slider's value and position.
- * 
+ *
  * @param {Element} element The ranged slider to update.
  * @param {string | number} value The new value for the ranged slider.
  * @param {number} notch The notch that the slider should now be at.
@@ -1298,7 +1298,7 @@ function updateRangedSlider(element, value, notch){
     const oldVal = element.getAttribute('value')
     const bar = element.getElementsByClassName('rangeSliderBar')[0]
     const track = element.getElementsByClassName('rangeSliderTrack')[0]
-    
+
     element.setAttribute('value', value)
 
     if(notch < 0){
@@ -1335,7 +1335,7 @@ function populateMemoryStatus(){
 /**
  * Validate the provided executable path and display the data on
  * the UI.
- * 
+ *
  * @param {string} execPath The executable path to populate against.
  */
 async function populateJavaExecDetails(execPath){
@@ -1344,19 +1344,19 @@ async function populateJavaExecDetails(execPath){
     const details = await validateSelectedJvm(ensureJavaDirIsRoot(execPath), server.effectiveJavaOptions.supported)
 
     if(details != null) {
-        settingsJavaExecDetails.innerHTML = `Selected: Java ${details.semverStr} (${details.vendor})`
+        settingsJavaExecDetails.innerHTML = `Seleccionado: Java ${details.semverStr} (${details.vendor})`
     } else {
-        settingsJavaExecDetails.innerHTML = 'Invalid Selection'
+        settingsJavaExecDetails.innerHTML = 'Selección Inválida'
     }
 }
 
 function populateJavaReqDesc(server) {
-    settingsJavaReqDesc.innerHTML = `Requires Java ${server.effectiveJavaOptions.suggestedMajor} x64.`
+    settingsJavaReqDesc.innerHTML = `Necesita Java ${server.effectiveJavaOptions.suggestedMajor} x64.`
 }
 
 function populateJvmOptsLink(server) {
     const major = server.effectiveJavaOptions.suggestedMajor
-    settingsJvmOptsLink.innerHTML = `Available Options for Java ${major} (HotSpot VM)`
+    settingsJvmOptsLink.innerHTML = `Opciones disponibles para Java ${major} (HotSpot VM)`
     if(major >= 12) {
         settingsJvmOptsLink.href = `https://docs.oracle.com/en/java/javase/${major}/docs/specs/man/java.html#extra-options-for-java`
     }
@@ -1412,7 +1412,7 @@ document.getElementById('settingsAboutDevToolsButton').onclick = (e) => {
 
 /**
  * Return whether or not the provided version is a prerelease.
- * 
+ *
  * @param {string} version The semver version to test.
  * @returns {boolean} True if the version is a prerelease, otherwise false.
  */
@@ -1424,7 +1424,7 @@ function isPrerelease(version){
 /**
  * Utility method to display version information on the
  * About and Update settings tabs.
- * 
+ *
  * @param {string} version The semver version to display.
  * @param {Element} valueElement The value element.
  * @param {Element} titleElement The title element.
@@ -1437,7 +1437,7 @@ function populateVersionInformation(version, valueElement, titleElement, checkEl
         titleElement.style.color = '#ff886d'
         checkElement.style.background = '#ff886d'
     } else {
-        titleElement.innerHTML = 'Stable Release'
+        titleElement.innerHTML = 'Release Estable'
         titleElement.style.color = null
         checkElement.style.background = null
     }
@@ -1456,11 +1456,11 @@ function populateAboutVersionInformation(){
  */
 function populateReleaseNotes(){
     $.ajax({
-        url: 'https://github.com/dscalzi/HeliosLauncher/releases.atom',
+        url: 'https://github.com/Warriors/GhostWarriorsLauncher/releases.atom',
         success: (data) => {
             const version = 'v' + remote.app.getVersion()
             const entries = $(data).find('entry')
-            
+
             for(let i=0; i<entries.length; i++){
                 const entry = $(entries[i])
                 let id = entry.find('id').text()
@@ -1476,7 +1476,7 @@ function populateReleaseNotes(){
         },
         timeout: 2500
     }).catch(err => {
-        settingsAboutChangelogText.innerHTML = 'Failed to load release notes.'
+        settingsAboutChangelogText.innerHTML = 'Error al cargar los changelogs.'
     })
 }
 
@@ -1504,7 +1504,7 @@ const settingsUpdateActionButton   = document.getElementById('settingsUpdateActi
 
 /**
  * Update the properties of the update action button.
- * 
+ *
  * @param {string} text The new button text.
  * @param {boolean} disabled Optional. Disable or enable the button
  * @param {function} handler Optional. New button event handler.
@@ -1519,32 +1519,32 @@ function settingsUpdateButtonStatus(text, disabled = false, handler = null){
 
 /**
  * Populate the update tab with relevant information.
- * 
+ *
  * @param {Object} data The update data.
  */
 function populateSettingsUpdateInformation(data){
     if(data != null){
-        settingsUpdateTitle.innerHTML = `New ${isPrerelease(data.version) ? 'Pre-release' : 'Release'} Available`
+        settingsUpdateTitle.innerHTML = `Nueva ${isPrerelease(data.version) ? 'Pre-release' : 'Release'} Disponible`
         settingsUpdateChangelogCont.style.display = null
         settingsUpdateChangelogTitle.innerHTML = data.releaseName
         settingsUpdateChangelogText.innerHTML = data.releaseNotes
         populateVersionInformation(data.version, settingsUpdateVersionValue, settingsUpdateVersionTitle, settingsUpdateVersionCheck)
-        
+
         if(process.platform === 'darwin'){
-            settingsUpdateButtonStatus('Download from GitHub<span style="font-size: 10px;color: gray;text-shadow: none !important;">Close the launcher and run the dmg to update.</span>', false, () => {
+            settingsUpdateButtonStatus('Descargar de GitHub<span style="font-size: 10px;color: gray;text-shadow: none !important;">Cierra el launcher y corre el dmg para actualizar.</span>', false, () => {
                 shell.openExternal(data.darwindownload)
             })
         } else {
-            settingsUpdateButtonStatus('Downloading..', true)
+            settingsUpdateButtonStatus('Descargar..', true)
         }
     } else {
-        settingsUpdateTitle.innerHTML = 'You Are Running the Latest Version'
+        settingsUpdateTitle.innerHTML = 'Estás Usando la Última Versión'
         settingsUpdateChangelogCont.style.display = 'none'
         populateVersionInformation(remote.app.getVersion(), settingsUpdateVersionValue, settingsUpdateVersionTitle, settingsUpdateVersionCheck)
-        settingsUpdateButtonStatus('Check for Updates', false, () => {
+        settingsUpdateButtonStatus('Buscar actualizaciones', false, () => {
             if(!isDev){
                 ipcRenderer.send('autoUpdateAction', 'checkForUpdate')
-                settingsUpdateButtonStatus('Checking for Updates..', true)
+                settingsUpdateButtonStatus('Buscando actualizaciones...', true)
             }
         })
     }
@@ -1552,7 +1552,7 @@ function populateSettingsUpdateInformation(data){
 
 /**
  * Prepare update tab for display.
- * 
+ *
  * @param {Object} data The update data.
  */
 function prepareUpdateTab(data = null){
@@ -1565,7 +1565,7 @@ function prepareUpdateTab(data = null){
 
 /**
   * Prepare the entire settings UI.
-  * 
+  *
   * @param {boolean} first Whether or not it is the first load.
   */
 async function prepareSettings(first = false) {

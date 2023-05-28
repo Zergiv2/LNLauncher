@@ -29,8 +29,8 @@ let currentView
 
 /**
  * Switch launcher views.
- * 
- * @param {string} current The ID of the current view container. 
+ *
+ * @param {string} current The ID of the current view container.
  * @param {*} next The ID of the next view container.
  * @param {*} currentFadeTime Optional. The fade out time for the current view.
  * @param {*} nextFadeTime Optional. The fade in time for the next view.
@@ -51,7 +51,7 @@ function switchView(current, next, currentFadeTime = 500, nextFadeTime = 500, on
 
 /**
  * Get the currently shown view container.
- * 
+ *
  * @returns {string} The currently shown view container.
  */
 function getCurrentView(){
@@ -70,7 +70,7 @@ async function showMainUI(data){
     refreshServerStatus()
     setTimeout(() => {
         document.getElementById('frameBar').style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
-        document.body.style.backgroundImage = `url('assets/images/backgrounds/${document.body.getAttribute('bkid')}.jpg')`
+        document.body.style.backgroundImage = `url('assets/images/backgrounds/${document.body.getAttribute('bkid')}.png')`
         $('#main').show()
 
         const isLoggedIn = Object.keys(ConfigManager.getAuthAccounts()).length > 0
@@ -102,7 +102,7 @@ async function showMainUI(data){
                 $('#loadSpinnerImage').removeClass('rotating')
             })
         }, 250)
-        
+
     }, 750)
     // Disable tabbing to the news container.
     initNews().then(() => {
@@ -115,9 +115,9 @@ function showFatalStartupError(){
         $('#loadingContainer').fadeOut(250, () => {
             document.getElementById('overlayContainer').style.background = 'none'
             setOverlayContent(
-                'Fatal Error: Unable to Load Distribution Index',
-                'A connection could not be established to our servers to download the distribution index. No local copies were available to load. <br><br>The distribution index is an essential file which provides the latest server information. The launcher is unable to start without it. Ensure you are connected to the internet and relaunch the application.',
-                'Close'
+                'Error Fatal: Imposible cargar Distribution Index',
+                'No se pudo establecer una conexión con nuestros servidores para descargar el distribution index. Ninguna copia local está disponible para ser usada. <br><br>El distribution index es un archivo esencial que provee toda la información del servidor. El launcher no puede iniciar sin el archivo. Asegúrate que tienes conexión a internet y vuelve a iniciar el launcher.',
+                'Cerrar'
             )
             setOverlayHandler(() => {
                 const window = remote.getCurrentWindow()
@@ -130,7 +130,7 @@ function showFatalStartupError(){
 
 /**
  * Common functions to perform after refreshing the distro index.
- * 
+ *
  * @param {Object} data The distro index object.
  */
 function onDistroRefresh(data){
@@ -143,7 +143,7 @@ function onDistroRefresh(data){
 
 /**
  * Sync the mod configurations with the distro index.
- * 
+ *
  * @param {Object} data The distro index object.
  */
 function syncModConfigurations(data){
@@ -227,7 +227,7 @@ function syncModConfigurations(data){
 
 /**
  * Ensure java configurations are present for the available servers.
- * 
+ *
  * @param {Object} data The distro index object.
  */
 function ensureJavaSettings(data) {
@@ -244,7 +244,7 @@ function ensureJavaSettings(data) {
  * Recursively scan for optional sub modules. If none are found,
  * this function returns a boolean. If optional sub modules do exist,
  * a recursive configuration object is returned.
- * 
+ *
  * @returns {boolean | Object} The resolved mod configuration.
  */
 function scanOptionalSubModules(mdls, origin){
@@ -284,11 +284,11 @@ function scanOptionalSubModules(mdls, origin){
 
 /**
  * Recursively merge an old configuration into a new configuration.
- * 
+ *
  * @param {boolean | Object} o The old configuration value.
  * @param {boolean | Object} n The new configuration value.
  * @param {boolean} nReq If the new value is a required mod.
- * 
+ *
  * @returns {boolean | Object} The merged configuration.
  */
 function mergeModConfiguration(o, n, nReq = false){
@@ -333,10 +333,10 @@ async function validateSelectedAccount(){
             ConfigManager.save()
             const accLen = Object.keys(ConfigManager.getAuthAccounts()).length
             setOverlayContent(
-                'Failed to Refresh Login',
-                `We were unable to refresh the login for <strong>${selectedAcc.displayName}</strong>. Please ${accLen > 0 ? 'select another account or ' : ''} login again.`,
-                'Login',
-                'Select Another Account'
+                'Error al refrescar el login',
+                `No se pudo refrescar el login de <strong>${selectedAcc.displayName}</strong>. Por favor ${accLen > 0 ? 'selecciona otra cuenta o ' : ''}inicia sesión de nuevo.`,
+                'Iniciar sesión',
+                'Usar otra cuenta'
             )
             setOverlayHandler(() => {
 
@@ -350,7 +350,7 @@ async function validateSelectedAccount(){
                     document.getElementById('loginUsername').value = selectedAcc.username
                     validateEmail(selectedAcc.username)
                 }
-                
+
                 loginOptionsViewOnLoginSuccess = getCurrentView()
                 loginOptionsViewOnLoginCancel = VIEWS.loginOptions
 
@@ -407,7 +407,7 @@ async function validateSelectedAccount(){
 /**
  * Temporary function to update the selected account along
  * with the relevent UI elements.
- * 
+ *
  * @param {string} uuid The UUID of the account.
  */
 function setSelectedAccount(uuid){
@@ -429,7 +429,7 @@ document.addEventListener('readystatechange', async () => {
             } else {
                 showFatalStartupError()
             }
-        } 
+        }
     }
 
 }, false)

@@ -26,9 +26,9 @@ window.eval = global.eval = function () {
 
 // Display warning when devtools window is opened.
 remote.getCurrentWebContents().on('devtools-opened', () => {
-    console.log('%cThe console is dark and full of terrors.', 'color: white; -webkit-text-stroke: 4px #a02d2a; font-size: 60px; font-weight: bold')
-    console.log('%cIf you\'ve been told to paste something here, you\'re being scammed.', 'font-size: 16px')
-    console.log('%cUnless you know exactly what you\'re doing, close this window.', 'font-size: 16px')
+    console.log('%cLa consola es oscura y llena de horrores.', 'color: white; -webkit-text-stroke: 4px #a02d2a; font-size: 60px; font-weight: bold')
+    console.log('%cSi alguien te dijo que pegaras algo aquí, no le des bola.', 'font-size: 16px')
+    console.log('%cA no ser que sea Amgelo o damots.', 'font-size: 16px')
 })
 
 // Disable zoom, needed for darwin.
@@ -41,22 +41,22 @@ if(!isDev){
     ipcRenderer.on('autoUpdateNotification', (event, arg, info) => {
         switch(arg){
             case 'checking-for-update':
-                loggerAutoUpdater.info('Checking for update..')
-                settingsUpdateButtonStatus('Checking for Updates..', true)
+                loggerAutoUpdater.log('Buscando actualizaciones..')
+                settingsUpdateButtonStatus('Buscando actualizaciones..', true)
                 break
             case 'update-available':
-                loggerAutoUpdater.info('New update available', info.version)
-                
+                loggerAutoUpdater.info('Nueva actualización disponible', info.version)
+
                 if(process.platform === 'darwin'){
-                    info.darwindownload = `https://github.com/dscalzi/HeliosLauncher/releases/download/v${info.version}/Helios-Launcher-setup-${info.version}${process.arch === 'arm64' ? '-arm64' : '-x64'}.dmg`
+                    info.darwindownload = `https://github.com/Ghost-Warriors/GhostWarriorsLauncher/releases/download/v${info.version}/GhostWarriors-Launcher-setup-${info.version}${process.arch === 'arm64' ? '-arm64' : '-x64'}.dmg`
                     showUpdateUI(info)
                 }
-                
+
                 populateSettingsUpdateInformation(info)
                 break
             case 'update-downloaded':
-                loggerAutoUpdater.info('Update ' + info.version + ' ready to be installed.')
-                settingsUpdateButtonStatus('Install Now', false, () => {
+                loggerAutoUpdater.info('Actualización ' + info.version + ' lista para ser instalada.')
+                settingsUpdateButtonStatus('Instalar ahora', false, () => {
                     if(!isDev){
                         ipcRenderer.send('autoUpdateAction', 'installUpdateNow')
                     }
@@ -64,8 +64,8 @@ if(!isDev){
                 showUpdateUI(info)
                 break
             case 'update-not-available':
-                loggerAutoUpdater.info('No new update found.')
-                settingsUpdateButtonStatus('Check for Updates')
+                loggerAutoUpdater.info('Ninguna actualización encontrada.')
+                settingsUpdateButtonStatus('Buscar actualizaciones')
                 break
             case 'ready':
                 updateCheckListener = setInterval(() => {
@@ -97,7 +97,7 @@ if(!isDev){
  * allowPrerelease. If we are running a prerelease version, then
  * this will always be set to true, regardless of the current value
  * of val.
- * 
+ *
  * @param {boolean} val The new allow prerelease value.
  */
 function changeAllowPrerelease(val){
@@ -187,7 +187,7 @@ document.addEventListener('readystatechange', function () {
         document.getElementById('launch_progress').style.width = 170.8
         document.getElementById('launch_details_right').style.maxWidth = 170.8
         document.getElementById('launch_progress_label').style.width = 53.21
-        
+
     }
 
 }, false)
@@ -203,7 +203,7 @@ $(document).on('click', 'a[href^="http"]', function(event) {
 /**
  * Opens DevTools window if you hold (ctrl + shift + i).
  * This will crash the program if you are using multiple
- * DevTools, for example the chrome debugger in VS Code. 
+ * DevTools, for example the chrome debugger in VS Code.
  */
 document.addEventListener('keydown', function (e) {
     if((e.key === 'I' || e.key === 'i') && e.ctrlKey && e.shiftKey){
