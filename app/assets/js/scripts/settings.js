@@ -286,9 +286,9 @@ function settingsNavItemListener(ele, fade = true){
     document.getElementById(selectedSettingsTab).onscroll = settingsTabScrollListener
 
     if(fade){
-        $(`#${prevTab}`).fadeOut(250, () => {
+        $(`#${prevTab}`).fadeOut(150, () => {
             $(`#${selectedSettingsTab}`).fadeIn({
-                duration: 250,
+                duration: 150,
                 start: () => {
                     settingsTabScrollListener({
                         target: document.getElementById(selectedSettingsTab)
@@ -344,7 +344,7 @@ const msftLogoutLogger = LoggerUtil.getLogger('Microsoft Logout')
 
 // Bind the add mojang account button.
 document.getElementById('settingsAddMojangAccount').onclick = (e) => {
-    switchView(getCurrentView(), VIEWS.login, 500, 500, () => {
+    switchView(getCurrentView(), VIEWS.login, 250, 250, () => {
         loginViewOnCancel = VIEWS.settings
         loginViewOnSuccess = VIEWS.settings
         loginCancelEnabled(true)
@@ -353,7 +353,7 @@ document.getElementById('settingsAddMojangAccount').onclick = (e) => {
 
 // Bind the add microsoft account button.
 document.getElementById('settingsAddMicrosoftAccount').onclick = (e) => {
-    switchView(getCurrentView(), VIEWS.waiting, 500, 500, () => {
+    switchView(getCurrentView(), VIEWS.waiting, 250, 250, () => {
         ipcRenderer.send(MSFT_OPCODE.OPEN_LOGIN, VIEWS.settings, VIEWS.settings)
     })
 }
@@ -364,7 +364,7 @@ ipcRenderer.on(MSFT_OPCODE.REPLY_LOGIN, (_, ...arguments_) => {
 
         const viewOnClose = arguments_[2]
         console.log(arguments_)
-        switchView(getCurrentView(), viewOnClose, 500, 500, () => {
+        switchView(getCurrentView(), viewOnClose, 250, 250, () => {
 
             if(arguments_[1] === MSFT_ERROR.NOT_FINISHED) {
                 // User cancelled.
@@ -389,7 +389,7 @@ ipcRenderer.on(MSFT_OPCODE.REPLY_LOGIN, (_, ...arguments_) => {
 
         // Error from request to Microsoft.
         if (Object.prototype.hasOwnProperty.call(queryMap, 'error')) {
-            switchView(getCurrentView(), viewOnClose, 500, 500, () => {
+            switchView(getCurrentView(), viewOnClose, 250, 250, () => {
                 // TODO Dont know what these errors are. Just show them I guess.
                 // This is probably if you messed up the app registration with Azure.
                 let error = queryMap.error // Error might be 'access_denied' ?
@@ -416,7 +416,7 @@ ipcRenderer.on(MSFT_OPCODE.REPLY_LOGIN, (_, ...arguments_) => {
             const authCode = queryMap.code
             AuthManager.addMicrosoftAccount(authCode).then(value => {
                 updateSelectedAccount(value)
-                switchView(getCurrentView(), viewOnClose, 500, 500, async () => {
+                switchView(getCurrentView(), viewOnClose, 250, 250, async () => {
                     await prepareSettings()
                 })
             })
@@ -435,7 +435,7 @@ ipcRenderer.on(MSFT_OPCODE.REPLY_LOGIN, (_, ...arguments_) => {
                         }
                     }
 
-                    switchView(getCurrentView(), viewOnClose, 500, 500, () => {
+                    switchView(getCurrentView(), viewOnClose, 250, 250, () => {
                         setOverlayContent(actualDisplayableError.title, actualDisplayableError.desc, Lang.queryJS('login.tryAgain'))
                         setOverlayHandler(() => {
                             toggleOverlay(false)
@@ -518,7 +518,7 @@ function processLogOut(val, isLastAccount){
     const targetAcc = ConfigManager.getAuthAccount(uuid)
     if(targetAcc.type === 'microsoft') {
         msAccDomElementCache = parent
-        switchView(getCurrentView(), VIEWS.waiting, 500, 500, () => {
+        switchView(getCurrentView(), VIEWS.waiting, 250, 250, () => {
             ipcRenderer.send(MSFT_OPCODE.OPEN_LOGOUT, uuid, isLastAccount)
         })
     } else {
@@ -536,7 +536,7 @@ function processLogOut(val, isLastAccount){
                 switchView(getCurrentView(), VIEWS.loginOptions)
             }
         })
-        $(parent).fadeOut(250, () => {
+        $(parent).fadeOut(150, () => {
             parent.remove()
         })
     }
@@ -545,7 +545,7 @@ function processLogOut(val, isLastAccount){
 // Bind reply for Microsoft Logout.
 ipcRenderer.on(MSFT_OPCODE.REPLY_LOGOUT, (_, ...arguments_) => {
     if (arguments_[0] === MSFT_REPLY_TYPE.ERROR) {
-        switchView(getCurrentView(), VIEWS.settings, 500, 500, () => {
+        switchView(getCurrentView(), VIEWS.settings, 250, 250, () => {
 
             if(arguments_.length > 1 && arguments_[1] === MSFT_ERROR.NOT_FINISHED) {
                 // User cancelled.
@@ -737,7 +737,13 @@ function parseModulesForUI(mdls, submodules, servConf){
     let reqMods = ''
     let optMods = ''
 
-    for(const mdl of mdls){
+    const sortedMdls = mdls.sort((a, b) => {
+        const aName = a.rawModule.name
+        const bName = b.rawModule.name
+        return aName.localeCompare(bName)
+    })
+
+    for(const mdl of sortedMdls){
 
         if(mdl.rawModule.type === Type.ForgeMod || mdl.rawModule.type === Type.LiteMod || mdl.rawModule.type === Type.LiteLoader){
 
@@ -852,7 +858,7 @@ function _saveModConfiguration(modConf){
 // Drop-in mod elements.
 
 let CACHE_SETTINGS_MODS_DIR
-let CACHE_DROPIN_MODS
+let CACHE_DROPIN_MODS = []
 
 /**
  * Resolve any located drop-in mods for this server and
@@ -860,6 +866,16 @@ let CACHE_DROPIN_MODS
  */
 async function resolveDropinModsForUI(){
     const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
+    const meta = DistroMetaAPI.getOrDefault().getServerById(ConfigManager.getSelectedServer())
+    const allows = meta.get('allowOptIn')
+    if ((typeof allows === 'boolean') && !allows) {
+        const button = document.getElementById('settingsDropinFileSystemButton')
+        button.disabled = true
+        button.textContent = 'El servidor actual no permite mods añadidos.'
+        return
+    }
+
+
     CACHE_SETTINGS_MODS_DIR = path.join(ConfigManager.getInstanceDirectory(), serv.rawServer.id, 'mods')
     CACHE_DROPIN_MODS = DropinModUtil.scanForDropinMods(CACHE_SETTINGS_MODS_DIR, serv.rawServer.minecraftVersion)
 
@@ -1078,23 +1094,13 @@ async function loadSelectedServerOnModsTab(){
 
     for(const el of document.getElementsByClassName('settingsSelServContent')) {
         el.innerHTML = `
-            <img class="serverListingImg" src="${serv.rawServer.icon}"/>
             <div class="serverListingDetails">
+                <img class="serverListingImg" src="${serv.rawServer.icon}"/>
                 <span class="serverListingName">${serv.rawServer.name}</span>
                 <span class="serverListingDescription">${serv.rawServer.description}</span>
+
                 <div class="serverListingInfo">
-                    <div class="serverListingVersion">${serv.rawServer.minecraftVersion}</div>
                     <div class="serverListingRevision">${serv.rawServer.version}</div>
-                    ${serv.rawServer.mainServer ? `<div class="serverListingStarWrapper">
-                        <svg id="Layer_1" viewBox="0 0 107.45 104.74" width="20px" height="20px">
-                            <defs>
-                                <style>.cls-1{fill:#fff;}.cls-2{fill:none;stroke:#fff;stroke-miterlimit:10;}</style>
-                            </defs>
-                            <path class="cls-1" d="M100.93,65.54C89,62,68.18,55.65,63.54,52.13c2.7-5.23,18.8-19.2,28-27.55C81.36,31.74,63.74,43.87,58.09,45.3c-2.41-5.37-3.61-26.52-4.37-39-.77,12.46-2,33.64-4.36,39-5.7-1.46-23.3-13.57-33.49-20.72,9.26,8.37,25.39,22.36,28,27.55C39.21,55.68,18.47,62,6.52,65.55c12.32-2,33.63-6.06,39.34-4.9-.16,5.87-8.41,26.16-13.11,37.69,6.1-10.89,16.52-30.16,21-33.9,4.5,3.79,14.93,23.09,21,34C70,86.84,61.73,66.48,61.59,60.65,67.36,59.49,88.64,63.52,100.93,65.54Z"/>
-                            <circle class="cls-2" cx="53.73" cy="53.9" r="38"/>
-                        </svg>
-                        <span class="serverListingStarTooltip">Servidor Principal</span>
-                    </div>` : ''}
                 </div>
             </div>
         `
@@ -1456,7 +1462,7 @@ function populateAboutVersionInformation(){
  */
 function populateReleaseNotes(){
     $.ajax({
-        url: 'https://github.com/Warriors/GhostWarriorsLauncher/releases.atom',
+        url: 'https://github.com/Ghost-Warriors/GhostWarriorsLauncher/releases.atom',
         success: (data) => {
             const version = 'v' + remote.app.getVersion()
             const entries = $(data).find('entry')

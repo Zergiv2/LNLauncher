@@ -10,6 +10,7 @@ const AuthManager   = require('./assets/js/authmanager')
 const ConfigManager = require('./assets/js/configmanager')
 const { DistroAPI } = require('./assets/js/distromanager')
 const Lang          = require('./assets/js/langloader')
+const { DistroMetaAPI } = require('./assets/js/distrometamanager')
 
 let rscShouldLoad = false
 let fatalStartupError = false
@@ -39,7 +40,7 @@ let currentView
  * @param {*} onNextFade Optional. Callback function to execute when the next view
  * fades in.
  */
-function switchView(current, next, currentFadeTime = 500, nextFadeTime = 500, onCurrentFade = () => {}, onNextFade = () => {}){
+function switchView(current, next, currentFadeTime = 250, nextFadeTime = 250, onCurrentFade = () => {}, onNextFade = () => {}){
     currentView = next
     $(`${current}`).fadeOut(currentFadeTime, async () => {
         await onCurrentFade()
@@ -70,7 +71,7 @@ async function showMainUI(data){
     refreshServerStatus()
     setTimeout(() => {
         document.getElementById('frameBar').style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
-        document.body.style.backgroundImage = `url('assets/images/backgrounds/${document.body.getAttribute('bkid')}.png')`
+        document.body.style.backgroundImage = `url('assets/images/backgrounds/${document.body.getAttribute('bkid')}')`
         $('#main').show()
 
         const isLoggedIn = Object.keys(ConfigManager.getAuthAccounts()).length > 0
@@ -112,7 +113,7 @@ async function showMainUI(data){
 
 function showFatalStartupError(){
     setTimeout(() => {
-        $('#loadingContainer').fadeOut(250, () => {
+        $('#loadingContainer').fadeOut(150, () => {
             document.getElementById('overlayContainer').style.background = 'none'
             setOverlayContent(
                 'Error Fatal: Imposible cargar Distribution Index',
@@ -383,9 +384,9 @@ async function validateSelectedAccount(){
             setDismissHandler(() => {
                 if(accLen > 1){
                     prepareAccountSelectionList()
-                    $('#overlayContent').fadeOut(250, () => {
+                    $('#overlayContent').fadeOut(150, () => {
                         bindOverlayKeys(true, 'accountSelectContent', true)
-                        $('#accountSelectContent').fadeIn(250)
+                        $('#accountSelectContent').fadeIn(150)
                     })
                 } else {
                     const accountsObj = ConfigManager.getAuthAccounts()

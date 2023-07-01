@@ -35,6 +35,7 @@ const ProcessBuilder          = require('./assets/js/processbuilder')
 const fs                      = require('fs-extra')
 const {join} = require('path')
 
+
 // Launch Elements
 const launch_content          = document.getElementById('launch_content')
 const launch_details          = document.getElementById('launch_details')
@@ -43,6 +44,7 @@ const launch_progress_label   = document.getElementById('launch_progress_label')
 const launch_details_text     = document.getElementById('launch_details_text')
 const server_selection_button = document.getElementById('server_selection_button')
 const user_text               = document.getElementById('user_text')
+const image_seal              = document.getElementById('image_seal')
 
 const loggerLanding = LoggerUtil.getLogger('Landing')
 
@@ -143,13 +145,13 @@ document.getElementById('launch_button').addEventListener('click', async e => {
 // Bind settings button
 document.getElementById('settingsMediaButton').onclick = async e => {
     await prepareSettings()
-    switchView(getCurrentView(), VIEWS.settings)
+    switchView(getCurrentView(), VIEWS.settings, 400, 400)
 }
 
 // Bind avatar overlay button.
 document.getElementById('avatarOverlay').onclick = async e => {
     await prepareSettings()
-    switchView(getCurrentView(), VIEWS.settings, 500, 500, () => {
+    switchView(getCurrentView(), VIEWS.settings, 250, 250, () => {
         settingsNavItemListener(document.getElementById('settingsNavAccount'), false)
     })
 }
@@ -176,6 +178,7 @@ function updateSelectedServer(serv){
     }
     ConfigManager.setSelectedServer(serv != null ? serv.rawServer.id : null)
     ConfigManager.save()
+    image_seal.src = serv != null ? serv.rawServer.icon : 'assets/images/SealCircle.png'
     server_selection_button.innerHTML = '\u2022 ' + (serv != null ? serv.rawServer.name : 'Ningún servidor seleccionado')
     if(getCurrentView() === VIEWS.settings){
         animateSettingsTabRefresh()
@@ -275,7 +278,7 @@ const refreshServerStatus = async (fade = false) => {
         loggerLanding.debug(err)
     }
     if(fade){
-        $('#server_status_wrapper').fadeOut(250, () => {
+        $('#server_status_wrapper').fadeOut(150, () => {
             document.getElementById('landingPlayerLabel').innerHTML = pLabel
             document.getElementById('player_count').innerHTML = pVal
             $('#server_status_wrapper').fadeIn(500)
@@ -351,7 +354,7 @@ async function asyncSystemScan(effectiveJavaOptions, launchAfter = true){
             }
         })
         setDismissHandler(() => {
-            $('#overlayContent').fadeOut(250, () => {
+            $('#overlayContent').fadeOut(150, () => {
                 //$('#overlayDismiss').toggle(false)
                 setOverlayContent(
                     'Necesitas Java<br>para Iniciar',
@@ -368,7 +371,7 @@ async function asyncSystemScan(effectiveJavaOptions, launchAfter = true){
 
                     asyncSystemScan(effectiveJavaOptions, launchAfter)
                 })
-                $('#overlayContent').fadeIn(250)
+                $('#overlayContent').fadeIn(150)
             })
         })
         toggleOverlay(true, true)
@@ -588,8 +591,9 @@ async function dlAsync(login = true) {
                 DiscordWrapper.updateDetails('Cargando juego..')
                 proc.stdout.on('data', gameStateChange)
             }
+            proc.stdout.on('data', gameCrashReportListener)
             proc.stdout.removeListener('data', tempListener)
-            proc.stderr.removeListener('data', gameErrorListener)
+            proc.stdout.removeListener('data', gameLaunchErrorListener)
         }
         const start = Date.now()
 
@@ -598,7 +602,8 @@ async function dlAsync(login = true) {
         // the client application has started, and we can hide
         // the progress bar stuff.
         const tempListener = function(data){
-            if(GAME_LAUNCH_REGEX.test(data.trim())){
+            data = data.trim()
+            if(GAME_LAUNCH_REGEX.test(data)){
                 const diff = Date.now()-start
                 if(diff < MIN_LINGER) {
                     setTimeout(onLoadComplete, MIN_LINGER-diff)
@@ -618,11 +623,56 @@ async function dlAsync(login = true) {
             }
         }
 
-        const gameErrorListener = function(data){
+        const gameLaunchErrorListener = function(data) {
             data = data.trim()
-            if(data.indexOf('Could not find or load main class net.minecraft.launchwrapper.Launch') > -1){
+            if (data.indexOf('Could not find or load main class net.minecraft.launchwrapper.Launch') > -1) {
                 loggerLaunchSuite.error('Game launch failed, LaunchWrapper was not downloaded properly.')
                 showLaunchFailure('Error Al Iniciar', 'El archivo principal, LaunchWrapper, falló en descargarse por completo. Como resultado, el juego no puede iniciar.<br><br>Para arreglar esto, apaga temporalmente tu antivirus y vuelve a iniciar el juego de nuevo.')
+
+                proc.kill(9)
+            } else if (data.includes('net.minecraftforge.fml.relauncher.FMLSecurityManager$ExitTrappedException')) {
+                loggerLaunchSuite.error('Game launch failed before the JVM could open the window!')
+                let LOG_FILE = path.join(ConfigManager.getInstanceDirectory(), serv.getID(), 'logs', 'latest.log')
+                setOverlayContent(
+                    'Error Al Iniciar',
+                    'Parece que tu juego no ha podido iniciar hasta el punto donde el cliente se abre y los crash reports son generados. Una causa común de esto puede ser conflictos entre mods al inicio del juego.<br><br>Si usas mods añadidos, por favor deshabilítalos e intenta de nuevo.<br><br>Si continúas con el problema, por favor sube tu latest.log a <a href="https://mclo.gs">mclo.gs</a> y envíalo en nuestro servidor de Discord.',
+                    'Okay!',
+                    'Abrir latest.log'
+                )
+                setOverlayHandler(() => {
+                    toggleOverlay(false)
+                })
+                setDismissHandler(() => {
+                    shell.openPath(LOG_FILE)
+                })
+                toggleOverlay(true, true)
+                toggleLaunchArea(false)
+                proc.kill(9)
+            }
+        }
+
+        const gameCrashReportListener = function(data){
+            data = data.trim()
+            console.log(data)
+            let date = new Date()
+            if(data.includes('---- Minecraft Crash Report ----' > -1)){
+                let CRASH_REPORT_FOLDER = path.join(ConfigManager.getInstanceDirectory(), serv.getID(), 'crash-reports')
+                let CRASH_REPORT_NAME = ('crash-' + date.getFullYear() + '-' + (date.getMonth() + 1).toLocaleString(undefined, {minimumIntegerDigits: 2}) + '-' + date.getDate().toLocaleString(undefined, {minimumIntegerDigits: 2}) + '_' + date.getHours().toLocaleString(undefined, {minimumIntegerDigits: 2}) + '.' + date.getMinutes().toLocaleString(undefined, {minimumIntegerDigits: 2}) + '.' + date.getSeconds().toLocaleString(undefined, {minimumIntegerDigits: 2}) + '-client.txt')
+                let CRASH_REPORT_PATH = path.join(CRASH_REPORT_FOLDER, CRASH_REPORT_NAME)
+                shell.showItemInFolder(CRASH_REPORT_PATH)
+                setOverlayContent(
+                    'Juego crasheado!',
+                    'Uh oh! Parece que tu juego ha crasheado. Se ha abierto la carpeta de crash-reports para que puedas compartirlo con nuestro staff en Discord. Si esto pasa de forma seguida, recomendamos que nos lo reportes.<br><br>El archivo de tu crash es: <br>' + CRASH_REPORT_NAME,
+                    'Okay',
+                    'Abrir Crash Report'
+                )
+                setOverlayHandler(() => {
+                    toggleOverlay(false)
+                })
+                setDismissHandler(() => {
+                    shell.openPath(CRASH_REPORT_PATH)
+                })
+                toggleOverlay(true, true)
             }
         }
 
@@ -632,7 +682,7 @@ async function dlAsync(login = true) {
 
             // Bind listeners to stdout.
             proc.stdout.on('data', tempListener)
-            proc.stderr.on('data', gameErrorListener)
+            proc.stderr.on('data', gameLaunchErrorListener)
 
             setLaunchDetails('Listo. Disfruta el servidor!')
 
@@ -779,9 +829,9 @@ function setNewsLoading(val){
 
 // Bind retry button.
 newsErrorRetry.onclick = () => {
-    $('#newsErrorFailed').fadeOut(250, () => {
+    $('#newsErrorFailed').fadeOut(150, () => {
         initNews()
-        $('#newsErrorLoading').fadeIn(250)
+        $('#newsErrorLoading').fadeIn(150)
     })
 }
 
@@ -801,8 +851,8 @@ newsArticleContentScrollable.onscroll = (e) => {
  */
 function reloadNews(){
     return new Promise((resolve, reject) => {
-        $('#newsContent').fadeOut(250, () => {
-            $('#newsErrorLoading').fadeIn(250)
+        $('#newsContent').fadeOut(150, () => {
+            $('#newsErrorLoading').fadeIn(150)
             initNews().then(() => {
                 resolve()
             })
@@ -817,7 +867,7 @@ let newsAlertShown = false
  */
 function showNewsAlert(){
     newsAlertShown = true
-    $(newsButtonAlert).fadeIn(250)
+    $(newsButtonAlert).fadeIn(150)
 }
 
 /**
@@ -841,8 +891,8 @@ function initNews(){
                 // News Loading Failed
                 setNewsLoading(false)
 
-                $('#newsErrorLoading').fadeOut(250, () => {
-                    $('#newsErrorFailed').fadeIn(250, () => {
+                $('#newsErrorLoading').fadeOut(150, () => {
+                    $('#newsErrorFailed').fadeIn(150, () => {
                         resolve()
                     })
                 })
@@ -857,8 +907,8 @@ function initNews(){
                 })
                 ConfigManager.save()
 
-                $('#newsErrorLoading').fadeOut(250, () => {
-                    $('#newsErrorNone').fadeIn(250, () => {
+                $('#newsErrorLoading').fadeOut(150, () => {
+                    $('#newsErrorNone').fadeIn(150, () => {
                         resolve()
                     })
                 })
@@ -916,9 +966,9 @@ function initNews(){
                 document.getElementById('newsNavigateRight').onclick = () => { switchHandler(true) }
                 document.getElementById('newsNavigateLeft').onclick = () => { switchHandler(false) }
 
-                $('#newsErrorContainer').fadeOut(250, () => {
+                $('#newsErrorContainer').fadeOut(150, () => {
                     displayArticle(newsArr[0], 1)
-                    $('#newsContent').fadeIn(250, () => {
+                    $('#newsContent').fadeIn(150, () => {
                         resolve()
                     })
                 })

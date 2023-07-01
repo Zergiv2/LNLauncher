@@ -1,0 +1,31 @@
+{
+  "APP_DISPLAY_NAME": "💠 Ghost Warriors Launcher",
+
+  "WELCOME_HEADER_TEXT": "BIENVENIDO A GHOST WARRIORS LAUNCHER",
+  "WELCOME_DESC_TEXT": "Este es el Launcher Exclusivo para la comunidad de damots02 y compañeros, Ghost Warriors. Teniendo este Launcher, vas a tener los beneficios de actualizaciones automaticas para siempre! Gracias por apoyar a damots! :).",
+  "WELCOME_DESC_CTA": "Estás tan solo a unos clicks de ingresar...",
+
+  "WEBSITE_ENABLE": false,
+  "WEBSITE_URL": "https://tundrastory.net",
+
+  "FB_ENABLE": true,
+  "FB_URL": "https://www.facebook.com/groups/1390908241452868",
+
+  "TIKTOK_ENABLE": true,
+  "TIKTOK_URL": "https://www.tiktok.com/@tundrastory/",
+
+  "TWITTER_ENABLE": true,
+  "TWITTER_URL": "https://twitter.com/TundraStory20",
+
+  "INSTAGRAM_ENABLE": true,
+  "INSTAGRAM_URL": "https://www.instagram.com/tundrastory20/",
+
+  "YOUTUBE_ENABLE": false,
+  "YOUTUBE_URL": "#",
+
+  "DISCORD_ENABLE": true,
+  "DISCORD_URL": "https://discord.com/invite/NpWBtzJDmQ",
+
+  "KICK_ENABLE": true,
+  "KICK_URL": "https://kick.com/damots02"
+}

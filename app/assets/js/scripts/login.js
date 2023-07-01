@@ -11,10 +11,6 @@ const loginCancelContainer  = document.getElementById('loginCancelContainer')
 const loginCancelButton     = document.getElementById('loginCancelButton')
 const loginEmailError       = document.getElementById('loginEmailError')
 const loginUsername         = document.getElementById('loginUsername')
-const loginPasswordError    = document.getElementById('loginPasswordError')
-const loginPassword         = document.getElementById('loginPassword')
-const checkmarkContainer    = document.getElementById('checkmarkContainer')
-const loginRememberOption   = document.getElementById('loginRememberOption')
 const loginButton           = document.getElementById('loginButton')
 const loginForm             = document.getElementById('loginForm')
 
@@ -53,7 +49,7 @@ function shakeError(element){
  */
 function validateEmail(value){
     if(value){
-        if(!basicEmail.test(value) && !validUsername.test(value)){
+        if(!validUsername.test(value)){
             showError(loginEmailError, Lang.queryJS('login.error.invalidValue'))
             loginDisabled(true)
             lu = false
@@ -115,13 +111,6 @@ function formDisabled(v){
     loginDisabled(v)
     loginCancelButton.disabled = v
     loginUsername.disabled = v
-    loginPassword.disabled = v
-    if(v){
-        checkmarkContainer.setAttribute('disabled', v)
-    } else {
-        checkmarkContainer.removeAttribute('disabled')
-    }
-    loginRememberOption.disabled = v
 }
 
 let loginViewOnSuccess = VIEWS.landing
@@ -137,9 +126,8 @@ function loginCancelEnabled(val){
 }
 
 loginCancelButton.onclick = (e) => {
-    switchView(getCurrentView(), loginViewOnCancel, 500, 500, () => {
+    switchView(getCurrentView(), loginViewOnCancel, 250, 250, () => {
         loginUsername.value = ''
-        loginPassword.value = ''
         loginCancelEnabled(false)
         if(loginViewCancelHandler != null){
             loginViewCancelHandler()
@@ -159,8 +147,8 @@ loginButton.addEventListener('click', () => {
     // Show loading stuff.
     loginLoading(true)
 
-    if (loginPassword.value === '' && !validUsername.test(loginUsername.value)) {
-        setOverlayContent('Usuario crackeado', 'Necesitas poner un nombre de usuario valido', 'Okay')
+    if (!validUsername.test(loginUsername.value)) {
+        setOverlayContent('Nombre inválido', 'Necesitas poner un nombre de usuario valido', 'Okay')
         setOverlayHandler(() => {
             formDisabled(false)
             toggleOverlay(false)
@@ -170,13 +158,13 @@ loginButton.addEventListener('click', () => {
         return
     }
 
-    AuthManager.addMojangAccount(loginUsername.value, loginPassword.value).then((value) => {
+    AuthManager.addMojangAccount(loginUsername.value, '').then((value) => {
         updateSelectedAccount(value)
         loginButton.innerHTML = loginButton.innerHTML.replace(Lang.queryJS('login.loggingIn'), Lang.queryJS('login.success'))
         $('.circle-loader').toggleClass('load-complete')
         $('.checkmark').toggle()
         setTimeout(() => {
-            switchView(VIEWS.login, loginViewOnSuccess, 500, 500, async () => {
+            switchView(VIEWS.login, loginViewOnSuccess, 250, 250, async () => {
                 // Temporary workaround
                 if(loginViewOnSuccess === VIEWS.settings){
                     await prepareSettings()
@@ -185,7 +173,6 @@ loginButton.addEventListener('click', () => {
                 loginCancelEnabled(false) // Reset this for good measure.
                 loginViewCancelHandler = null // Reset this for good measure.
                 loginUsername.value = ''
-                loginPassword.value = ''
                 $('.circle-loader').toggleClass('load-complete')
                 $('.checkmark').toggle()
                 loginLoading(false)

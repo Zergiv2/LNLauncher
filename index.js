@@ -11,6 +11,7 @@ const path                              = require('path')
 const semver                            = require('semver')
 const { pathToFileURL }                 = require('url')
 const { AZURE_CLIENT_ID, MSFT_OPCODE, MSFT_REPLY_TYPE, MSFT_ERROR, SHELL_OPCODE } = require('./app/assets/js/ipcconstants')
+let settings = require('./app/config/settings.json')
 
 // Setup auto updater.
 function initAutoUpdater(event, data) {
@@ -225,8 +226,8 @@ function createWindow() {
     win = new BrowserWindow({
         width: 980,
         height: 552,
-        minWidth: 755,
-        minHeight: 350,
+        minWidth: 1280,
+        minHeight: 720,
         icon: getPlatformIcon('SealCircle'),
         frame: false,
         webPreferences: {
@@ -238,7 +239,13 @@ function createWindow() {
     })
     remoteMain.enable(win.webContents)
 
-    ejse.data('bkid', Math.floor((Math.random() * fs.readdirSync(path.join(__dirname, 'app', 'assets', 'images', 'backgrounds')).length)))
+    let backgroundDir = fs.readdirSync(path.join(__dirname, 'app', 'assets', 'images', 'backgrounds'))
+    ejse.data('bkid', Array.from(backgroundDir.values())[Math.floor((Math.random() * backgroundDir.length))])
+
+    //load constants into ejs
+    Object.keys(settings).forEach(function(key) {
+        ejse.data(key, settings[key])
+    })
 
     win.loadURL(pathToFileURL(path.join(__dirname, 'app', 'app.ejs')).toString())
 

@@ -2,12 +2,13 @@ const fs   = require('fs-extra')
 const { LoggerUtil } = require('helios-core')
 const os   = require('os')
 const path = require('path')
+const constants = require('../../config/constants')
 
 const logger = LoggerUtil.getLogger('ConfigManager')
 
 const sysRoot = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Application Support' : process.env.HOME)
 
-const dataPath = path.join(sysRoot, '.ghostwarriorslauncher')
+const dataPath = path.join(sysRoot, '.' + constants.APP_DATA_NAME)
 
 const launcherDir = require('@electron/remote').app.getPath('userData')
 

@@ -19,7 +19,7 @@ function loginOptionsCancelEnabled(val){
 }
 
 loginOptionMicrosoft.onclick = (e) => {
-    switchView(getCurrentView(), VIEWS.waiting, 500, 500, () => {
+    switchView(getCurrentView(), VIEWS.waiting, 250, 250, () => {
         ipcRenderer.send(
             MSFT_OPCODE.OPEN_LOGIN,
             loginOptionsViewOnLoginSuccess,
@@ -29,7 +29,7 @@ loginOptionMicrosoft.onclick = (e) => {
 }
 
 loginOptionMojang.onclick = (e) => {
-    switchView(getCurrentView(), VIEWS.login, 500, 500, () => {
+    switchView(getCurrentView(), VIEWS.login, 250, 250, () => {
         loginViewOnSuccess = loginOptionsViewOnLoginSuccess
         loginViewOnCancel = loginOptionsViewOnLoginCancel
         loginCancelEnabled(true)
@@ -37,7 +37,7 @@ loginOptionMojang.onclick = (e) => {
 }
 
 loginOptionsCancelButton.onclick = (e) => {
-    switchView(getCurrentView(), loginOptionsViewOnCancel, 500, 500, () => {
+    switchView(getCurrentView(), loginOptionsViewOnCancel, 250, 250, () => {
         // Clear login values (Mojang login)
         // No cleanup needed for Microsoft.
         loginUsername.value = ''

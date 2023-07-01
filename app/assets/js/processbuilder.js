@@ -9,6 +9,7 @@ const os                    = require('os')
 const path                  = require('path')
 
 const ConfigManager            = require('./configmanager')
+const {DistroMetaAPI} = require('./distrometamanager')
 
 const logger = LoggerUtil.getLogger('ProcessBuilder')
 
@@ -61,8 +62,13 @@ class ProcessBuilder {
         logger.info('Launch Arguments:', args)
 
         // Delete extra mods
-        const dir = path.join(ConfigManager.getInstanceDirectory(), this.server.rawServer.id, 'mods')
-        fs.rmSync(dir, { recursive: true, force: true })
+        const meta = DistroMetaAPI.getOrDefault()
+        const serverMeta = meta.getServerById(this.server.rawServer.id)
+        const allowsOptIn = serverMeta.get('allowOptIn')
+        if (!allowsOptIn) {
+            const dir = path.join(ConfigManager.getInstanceDirectory(), this.server.rawServer.id, 'mods')
+            fs.rmSync(dir, { recursive: true, force: true })
+        }
 
         const child = child_process.spawn(ConfigManager.getJavaExecutable(this.server.rawServer.id), args, {
             cwd: this.gameDir,
