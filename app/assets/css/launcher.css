@@ -2878,6 +2878,9 @@ input:checked + .toggleSwitchSlider:before {
     height: 90px;
     width: 90px;
     margin-top: 50px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
 
 /* Logo container styles w/ update. */
