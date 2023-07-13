@@ -4,6 +4,9 @@ const semver = require('semver')
 
 const DropinModUtil  = require('./assets/js/dropinmodutil')
 const { MSFT_OPCODE, MSFT_REPLY_TYPE, MSFT_ERROR } = require('./assets/js/ipcconstants')
+const { post } = require('got')
+const { clipboard } = require('@electron/remote')
+
 
 const settingsState = {
     invalid: new Set()
@@ -1593,8 +1596,146 @@ async function prepareSettings(first = false) {
     await initSettingsValues()
     prepareAccountsTab()
     await prepareJavaTab()
+    await prepareMinecraftTab()
     prepareAboutTab()
 }
 
 // Prepare the settings UI on startup.
 //prepareSettings(true)
+
+function prepareMinecraftTab(){
+    prepareUploadLogButton()
+}
+
+function prepareUploadLogButton(){
+    const uploadLogButton = document.getElementById('uploadLogsButton')
+    uploadLogButton.onclick = async (e) => {
+        const oldLabel = `${uploadLogButton.innerHTML}`
+        uploadLogButton.disabled = true
+        uploadLogButton.innerHTML = 'Subiendo...'
+        try {
+            const text = await createLogsText()
+            clipboard.writeText(text)
+            console.info(text)
+
+            uploadLogButton.innerHTML = 'Copiado en el portapapeles!'
+            setTimeout(() => {
+                uploadLogButton.innerHTML = oldLabel
+                uploadLogButton.disabled = false
+            }, 10000)
+        } catch (e) {
+            uploadLogButton.innerHTML = 'Hubo un error al subir el log.'
+            setTimeout(() => {
+                uploadLogButton.innerHTML = oldLabel
+                uploadLogButton.disabled = false
+            }, 5000)
+            console.error(e)
+        }
+    }
+}
+
+async function createLogsText() {
+    const logs = await uploadLogs()
+    return serializeToClipboardText(logs)
+}
+
+/** @param {{ log: string | null, crash: string | null }} logsObject */
+function serializeToClipboardText(logsObject) {
+    /** @type {string[]}*/
+    const texts = []
+
+    if (logsObject.log) {
+        texts.push(`Log: ${logsObject.log}`)
+    }
+    if (logsObject.crash) {
+        texts.push(`Crash: ${logsObject.crash}`)
+    }
+
+    if (!texts.length) {
+        return 'No se encontraron logs o hubo un error al subirlos.'
+    }
+
+    return texts.join('\n')
+}
+
+/** @return {Promise<{ log: string | null, crash: string | null }>} */
+async function uploadLogs(){
+    const urls = {}
+    urls.log = await uploadLatestLog()
+
+    urls.crash = await uploadLatestCrash()
+    return urls
+}
+
+/** @return {Promise<null | string>} */
+async function uploadLatestCrash() {
+    const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
+    const directoryPath = path.join(ConfigManager.getInstanceDirectory(), serv.rawServer.id, 'crash-reports')
+    if (!fs.existsSync(directoryPath)) return null
+
+    const files = fs.readdirSync(directoryPath)
+    const fileNames = files
+        .filter(fileName => fs.statSync(path.join(directoryPath, fileName)).isFile())
+        .sort((fileNameA, fileNameB) => {
+            const filePathA = path.join(directoryPath, fileNameA)
+            const filePathB = path.join(directoryPath, fileNameB)
+            const fileStatA = fs.statSync(filePathA)
+            const fileStatB = fs.statSync(filePathB)
+
+            return fileStatB.mtime.getTime() - fileStatA.mtime.getTime()
+        })
+
+    const mostRecent = fileNames[0]
+    if (!mostRecent) return null
+
+    const filePath = path.join(directoryPath, mostRecent)
+    return uploadFromPath(filePath)
+}
+
+/** @return {Promise<null | string>} */
+async function uploadLatestLog() {
+    const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
+    const latestLogPath = path.join(ConfigManager.getInstanceDirectory(), serv.rawServer.id, 'logs', 'latest.log')
+    if (!fs.existsSync(latestLogPath)) return null
+
+    return uploadFromPath(latestLogPath)
+}
+
+/** @return {Promise<null | string>} */
+async function uploadFromPath(path){
+    console.log('Trying to upload path:', path)
+    try {
+        const content = fs.readFileSync(path).toString()
+        return await uploadToMcLogs(content)
+    } catch (e) {
+        console.error(e)
+        return null
+    }
+}
+
+
+/**
+ * Uploads a given text to mclo.gs
+ * @param {string} content The text to upload
+ *
+ * @returns {Promise<string>} The mclo.gs URL of the uploaded text
+ */
+async function uploadToMcLogs(content){
+    const form = new FormData()
+    form.append('content', content)
+
+    const data = await post('https://api.mclo.gs/1/log', {
+        form,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': `${remote.app.getName()} v${remote.app.getVersion()} (${process.platform} ${process.arch})`
+        },
+        responseType: 'json',
+        timeout: 30000,
+        retry: {
+            limit: 3
+        }
+    })
+
+    return data.body.url
+}

@@ -304,6 +304,30 @@ body, button {
 }
 
 /* Login button styles. */
+#uploadLogsButton {
+    background: none;
+    border: none;
+    text-align: left;
+    color: white;
+    cursor: pointer;
+    outline: none;
+    transition: 0.25s ease;
+    font-size: 16px;
+}
+#uploadLogsButton:hover,
+#uploadLogsButton:focus {
+    text-shadow: 0px 0px 20px white, 0px 0px 20px white, 0px 0px 20px white;
+}
+#uploadLogsButton:active {
+    text-shadow: 0px 0px 20px rgba(255, 255, 255, 0.75), 0px 0px 20px rgba(255, 255, 255, 0.75), 0px 0px 20px rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.75);
+}
+#uploadLogsButton:disabled {
+    color: rgba(255, 255, 255, 0.75);
+    pointer-events: none;
+}
+
+/* Login button styles. */
 #welcomeButton {
     background: none;
     font-weight: bold;
@@ -1437,10 +1461,18 @@ input:checked + .toggleSwitchSlider:before {
     display: flex;
     align-items: center;
     background: rgba(126, 126, 126, 0.57);
-    border-radius: 3px 0px 0px 3px;
+    border-radius: 3px 0 0 3px;
     padding: 5px;
     transition: 0.25s ease;
 }
+
+#settingsDataSelIcon {
+    border: 0;
+    cursor: pointer;
+    white-space: nowrap;
+    outline: none;
+}
+
 .settingsFileSelSVG {
     width: 20px;
     height: 20px;
@@ -3138,7 +3170,7 @@ input:checked + .toggleSwitchSlider:before {
     margin-top: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: transparent transparent transparent rgba(0, 0, 0, 0.75);
+    border-color: transparent transparent transparent rgba(0, 0, 0, 0.25);
 }
 .mediaButton:hover #settingsTooltip,
 .mediaButton:focus #settingsTooltip,
