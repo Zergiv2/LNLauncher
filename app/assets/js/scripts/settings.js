@@ -42,6 +42,14 @@ bindSettingsSelect()
 
 
 function bindFileSelectors(){
+    const fileSelButton = document.getElementById('settingsDataSelIcon')
+    fileSelButton.onclick = () => {
+        const path = ConfigManager.getDataDirectory()
+        shell.openPath(path).catch((e) => {
+            console.error(e)
+        })
+    }
+
     for(let ele of document.getElementsByClassName('settingsFileSelButton')){
 
         ele.onclick = async e => {
