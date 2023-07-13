@@ -1,6 +1,6 @@
 const APP_DATA_NAME = 'ghostwarriorslauncher'
-const DISTRIBUTION_URL = 'http://174.136.202.58:81/modpacks/distribution.json'
-const DISTRIBUTION_META_URL = 'http://174.136.202.58:81/modpacks/distribution-meta.json'
+const DISTRIBUTION_URL = 'https://launcherassets.ghostwarriors.top/distribution.json'
+const DISTRIBUTION_META_URL = 'https://launcherassets.ghostwarriors.top/distribution-meta.json'
 
 const DEFAULT_DISTRIBUTION_META = {}
 const DEFAULT_SERVER_META = { allowOptIn: true }
