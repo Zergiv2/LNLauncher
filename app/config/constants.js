@@ -1,6 +1,6 @@
-const APP_DATA_NAME = 'ghostwarriorslauncher'
-const DISTRIBUTION_URL = 'https://launcherassets.ghostwarriors.top/distribution.json'
-const DISTRIBUTION_META_URL = 'https://launcherassets.ghostwarriors.top/distribution-meta.json'
+const APP_DATA_NAME = 'techterralauncher'
+const DISTRIBUTION_URL = 'http://techterra.x10.mx/nebula/distribution.json'
+const DISTRIBUTION_META_URL = 'http://techterra.x10.mx/nebula/distrometa.json'
 
 const DEFAULT_DISTRIBUTION_META = {}
 const DEFAULT_SERVER_META = { allowOptIn: true }
