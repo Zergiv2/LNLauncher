@@ -48,7 +48,7 @@ if(!isDev){
                 loggerAutoUpdater.info('Nueva actualización disponible', info.version)
 
                 if(process.platform === 'darwin'){
-                    info.darwindownload = `https://github.com/Ghost-Warriors/GhostWarriorsLauncher/releases/download/v${info.version}/GhostWarriors-Launcher-setup-${info.version}${process.arch === 'arm64' ? '-arm64' : '-x64'}.dmg`
+                    info.darwindownload = `https://github.com/Zergiv/ZLauncher/releases/download/v${info.version}/ZLauncher-Launcher-setup-${info.version}${process.arch === 'arm64' ? '-arm64' : '-x64'}.dmg`
                     showUpdateUI(info)
                 }
 

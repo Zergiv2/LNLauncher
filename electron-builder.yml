@@ -1,5 +1,5 @@
-appId: 'ghostwarriorslauncher'
-productName: 'Ghost Warriors Launcher'
+appId: 'zlauncher'
+productName: 'ZLauncher'
 artifactName: '${productName}-setup-${version}.${ext}'
 
 copyright: 'Copyright © 2018-2023 Daniel Scalzi'
@@ -41,8 +41,8 @@ linux:
   target: 'AppImage'
   maintainer: 'Daniel Scalzi'
   vendor: 'Daniel Scalzi'
-  synopsis: 'Launcher de Minecraft - Ghost Warriors'
-  description: 'Launcher modificado que permite el acceso a los modpacks de Ghost Warriors. Todos los mods, configuraciones y actualizaciones son automáticas.'
+  synopsis: 'Launcher de Minecraft - ZLauncher'
+  description: 'Launcher modificado que permite el acceso a los modpacks de Zergiv2. Todos los mods, configuraciones y actualizaciones son automáticas.'
   category: 'Game'
 
 

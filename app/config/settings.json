@@ -1,31 +1,31 @@
 {
-  "APP_DISPLAY_NAME": "💠 Ghost Warriors Launcher",
+  "APP_DISPLAY_NAME": "ZLauncher 🌎",
 
-  "WELCOME_HEADER_TEXT": "BIENVENIDO A GHOST WARRIORS LAUNCHER",
-  "WELCOME_DESC_TEXT": "Este es el Launcher Exclusivo para la comunidad de damots02 y compañeros, Ghost Warriors. Teniendo este Launcher, vas a tener los beneficios de actualizaciones automaticas para siempre! Gracias por apoyar a damots! :).",
+  "WELCOME_HEADER_TEXT": "Bienvenido a ZLauncher",
+  "WELCOME_DESC_TEXT": "Este launcher es exclusivo para los servidores desarrollados por Zergiv2",
   "WELCOME_DESC_CTA": "Estás tan solo a unos clicks de ingresar...",
 
-  "WEBSITE_ENABLE": false,
-  "WEBSITE_URL": "https://tundrastory.net",
+  "WEBSITE_ENABLE": true,
+  "WEBSITE_URL": "http://techterra.x10.mx/",
 
-  "FB_ENABLE": true,
-  "FB_URL": "https://www.facebook.com/groups/1390908241452868",
+  "FB_ENABLE": false,
+  "FB_URL": "",
 
   "TIKTOK_ENABLE": true,
-  "TIKTOK_URL": "https://www.tiktok.com/@tundrastory/",
+  "TIKTOK_URL": "https://www.tiktok.com/@zergi_v2",
 
-  "TWITTER_ENABLE": true,
-  "TWITTER_URL": "https://twitter.com/TundraStory20",
+  "TWITTER_ENABLE": false,
+  "TWITTER_URL": "",
 
-  "INSTAGRAM_ENABLE": true,
-  "INSTAGRAM_URL": "https://www.instagram.com/tundrastory20/",
+  "INSTAGRAM_ENABLE": false,
+  "INSTAGRAM_URL": "",
 
-  "YOUTUBE_ENABLE": false,
-  "YOUTUBE_URL": "#",
+  "YOUTUBE_ENABLE": true,
+  "YOUTUBE_URL": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
 
   "DISCORD_ENABLE": true,
-  "DISCORD_URL": "https://discord.com/invite/NpWBtzJDmQ",
+  "DISCORD_URL": "https://discord.com/invite/vHCbvhzrj5",
 
   "KICK_ENABLE": true,
-  "KICK_URL": "https://kick.com/damots02"
+  "KICK_URL": "https://kick.com/zergi-v2"
 }
