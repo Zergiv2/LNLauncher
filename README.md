@@ -1,4 +1,4 @@
-<p align="center"><img src="https://iili.io/JiHNfov.png" width="150px" height="150px" ></p>
+<p align="center"><img src="https://iili.io/HiIIHa1.png" width="150px" height="150px" ></p>
 
 <h1 align="center">ZLauncher</h1>
 
