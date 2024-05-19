@@ -8,4 +8,4 @@
 
 ---
 
-<p align="center">This is a launcher made for the Ghost Warriors community, automatically installing and updating all the mods required. More indev info on the <a href="https://github.com/dscalzi/HeliosLauncher">original repo</a>.</p>
+<p align="center"> Launcher modificado por Zergiv2, instalación de minecraft y mods automática<a href="https://github.com/dscalzi/HeliosLauncher">repositorio original</a>.</p>
