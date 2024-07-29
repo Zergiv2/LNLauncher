@@ -2,11 +2,11 @@
   "APP_DISPLAY_NAME": "ZLauncher 🌎",
 
   "WELCOME_HEADER_TEXT": "Bienvenido a ZLauncher",
-  "WELCOME_DESC_TEXT": "Este launcher es exclusivo para los servidores desarrollados por Zergiv2",
+  "WELCOME_DESC_TEXT": "Launcher desarrollado por zergiv2",
   "WELCOME_DESC_CTA": "Estás tan solo a unos clicks de ingresar...",
 
   "WEBSITE_ENABLE": true,
-  "WEBSITE_URL": "http://techterra.x10.mx/",
+  "WEBSITE_URL": "https://panylimon.es/",
 
   "FB_ENABLE": false,
   "FB_URL": "",
@@ -26,6 +26,6 @@
   "DISCORD_ENABLE": true,
   "DISCORD_URL": "https://discord.com/invite/vHCbvhzrj5",
 
-  "KICK_ENABLE": true,
+  "KICK_ENABLE": false,
   "KICK_URL": "https://kick.com/zergi-v2"
 }
