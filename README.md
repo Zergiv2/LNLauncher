@@ -1,11 +1,18 @@
-<p align="center"><img src="https://iili.io/HiIIHa1.png" width="150px" height="150px" ></p>
+# Limoni Network Launcher
 
-<h1 align="center">LNauncher</h1>
+![Limoni Network Launcher](https://iili.io/dwp2OHx.png)
 
-<em><h5 align="center">(fork of Helios)</h5></em>
+## Descripción
 
-[<p align="center"><img src="[https://iili.io/JiHNfov.png](https://cdn.discordapp.com/attachments/1263829277128917093/1279099867448348815/limoninetwork.png?ex=66d33614&is=66d1e494&hm=8546d43b6cfdd2d3096982b364e771b41876f2c25a9f970e8ccbb88f0c3cb071&)" alt="gh actions">](https://github.com/Zergiv/ZLauncher/actions)
+**Limoni Network Launcher** es un lanzador personalizado diseñado para el servidor de Minecraft **Limoni Network**, que ofrece diversas modalidades de juego. Este proyecto ha sido desarrollado por **Belupe_** y diseñado visualmente por **Zergiv2**.
 
----
+El lanzador está basado en el proyecto [HeliosLauncher](https://github.com/dscalzi/HeliosLauncher) de **dscalzi** y ha sido adaptado para satisfacer las necesidades específicas de nuestra comunidad.
 
-<p align="center"> Launcher modificado por Zergiv2, instalación de minecraft y mods automática<a href="https://github.com/dscalzi/HeliosLauncher">repositorio original</a>.</p>
+## Repositorios
+
+- **Repositorio de Limoni Network Launcher:** [LNLauncher](https://github.com/Zergiv2/LNLauncher)
+- **Repositorio original de HeliosLauncher:** [HeliosLauncher](https://github.com/dscalzi/HeliosLauncher)
+
+## Descarga
+
+Puedes descargar la última versión del lanzador desde la sección de [Releases](https://github.com/Zergiv2/LNLauncher/releases) del repositorio.

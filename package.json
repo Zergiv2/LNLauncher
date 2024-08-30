@@ -1,9 +1,9 @@
 {
-  "name": "zlauncher",
+  "name": "lnlauncher",
   "version": "2.2.4",
-  "productName": "ZLauncher",
+  "productName": "LNLauncher",
   "description": "Launcher para la comunidad de Zergiv2",
-  "author": "ZLauncher (https://github.com/Zergiv/ZLauncher), fork de Dscalzi (https://github.com/dscalzi/)",
+  "author": "LNLauncher (https://github.com/Zergiv2/LNLauncher), fork de Dscalzi (https://github.com/dscalzi/)",
   "license": "UNLICENSED",
   "private": true,
   "main": "index.js",
@@ -43,6 +43,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Zergiv/ZLauncher.git"
+    "url": "git+https://github.com/Zergiv2/LNLauncher.git"
   }
 }

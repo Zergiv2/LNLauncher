@@ -1,7 +1,7 @@
 {
-  "APP_DISPLAY_NAME": "ZLauncher 🌎",
+  "APP_DISPLAY_NAME": "Limoni Network Launcher 🍋",
 
-  "WELCOME_HEADER_TEXT": "Bienvenido a ZLauncher",
+  "WELCOME_HEADER_TEXT": "Bienvenido a Pan y Limones",
   "WELCOME_DESC_TEXT": "Launcher desarrollado por zergiv2",
   "WELCOME_DESC_CTA": "Estás tan solo a unos clicks de ingresar...",
 
@@ -12,7 +12,7 @@
   "FB_URL": "",
 
   "TIKTOK_ENABLE": true,
-  "TIKTOK_URL": "https://www.tiktok.com/@zergi_v2",
+  "TIKTOK_URL": "",
 
   "TWITTER_ENABLE": false,
   "TWITTER_URL": "",
@@ -21,11 +21,11 @@
   "INSTAGRAM_URL": "",
 
   "YOUTUBE_ENABLE": true,
-  "YOUTUBE_URL": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  "YOUTUBE_URL": "",
 
   "DISCORD_ENABLE": true,
-  "DISCORD_URL": "https://discord.com/invite/vHCbvhzrj5",
+  "DISCORD_URL": "",
 
   "KICK_ENABLE": false,
-  "KICK_URL": "https://kick.com/zergi-v2"
+  "KICK_URL": "h"
 }
